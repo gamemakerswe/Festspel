@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 Mega Festspel</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('https://images.unsplash.com/photo-1560844083-1a7a3150b0c2?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    text-align: center;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 42px;
+    margin: 20px 0;
+    text-shadow: 2px 2px #000;
+  }
+  .menu button {
+    display: block;
+    width: 80%;
+    max-width: 320px;
+    padding: 15px;
+    margin: 12px auto;
+    font-size: 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    color: #fff;
+  }
+  .menu button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+  .never { background: #ff4d6d; }
+  .truth { background: #6a5cff; }
+  .most { background: #ffb84d; color: #000; }
+  .naughty { background: #ff3399; }
+  .easy { background: #33ccff; }
+  .challenge { background: #33ff77; color: #000; }
+  .party { background: #ff9933; }
+
+  .card {
+    margin-top: 30px;
+    font-size: 24px;
+    min-height: 120px;
+    padding: 20px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    box-shadow: 0 0 15px #000;
+    transition: all 0.3s ease;
+  }
+  .back {
+    margin-top: 20px;
+    background: #444;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+<h1>🎉 Mega Festspel</h1>
+
+<div class="menu" id="menu">
+  <button class="never" onclick="startCategory('never')">🍻 Jag har aldrig</button>
+  <button class="truth" onclick="startCategory('truth')">🔥 Sanning eller konsekvens</button>
+  <button class="most" onclick="startCategory('most')">🤔 Vem är mest trolig</button>
+  <button class="naughty" onclick="startCategory('naughty')">😏 Snuskiga & pinsamma</button>
+  <button class="easy" onclick="startCategory('easy')">😊 Isbrytare & roliga</button>
+  <button class="challenge" onclick="startCategory('challenge')">🏆 Drickspel / Utmaningar</button>
+  <button class="party" onclick="startCategory('party')">🎉 Extra party-spel</button>
+</div>
+
+<div id="game" style="display:none;">
+  <div class="card" id="cardText"></div>
+  <button onclick="nextCard()">➡️ Nästa</button><br>
+  <button class="back" onclick="goBack()">⬅️ Tillbaka</button>
+</div>
+
+<script>
+const categories = {
+  never: [
+    "Jag har aldrig kysst någon på en fest",
+    "Jag har aldrig tagit en shot ensam",
+    "Jag har aldrig dansat på bordet",
+    "Jag har aldrig ljugit om hur mycket jag druckit",
+    "Jag har aldrig flirtat med någon på en fest",
+    "Jag har aldrig spelat sanning eller konsekvens och blivit pinsam",
+    "Jag har aldrig skickat pinsamt meddelande till fel person",
+    "Jag har aldrig ramlat på dansgolvet",
+    "Jag har aldrig sjungit karaoke offentligt",
+    "Jag har aldrig blivit utkörd från en fest"
+  ],
+  truth: [
+    "Sanning: Vad är det mest pinsamma du gjort när du varit full?",
+    "Sanning: Har du någon crush här på festen?",
+    "Sanning: Har du någonsin kysst någon på fyllan?",
+    "Konsekvens: Ta en shot direkt",
+    "Konsekvens: Dansa 30 sekunder utan musik",
+    "Sanning: Har du någonsin skickat ett flirtigt meddelande till fel person?",
+    "Konsekvens: Byt plats med någon",
+    "Sanning: Vad var ditt största party-misstag?",
+    "Sanning: Vem här skulle du vilja kyssa?",
+    "Konsekvens: Ta en selfie med någon"
+  ],
+  most: [
+    "Vem är mest trolig att ta första shoten?",
+    "Vem är mest trolig att börja dansa på bordet?",
+    "Vem är mest trolig att bli fullast?",
+    "Vem är mest trolig att sjunga karaoke?",
+    "Vem är mest trolig att bli pinsam?",
+    "Vem är mest trolig att ta en konstig selfie?",
+    "Vem är mest trolig att prata hela natten?",
+    "Vem är mest trolig att glömma sitt glas?",
+    "Vem är mest trolig att berätta en hemlighet?",
+    "Vem är mest trolig att dansa med alla?"
+  ],
+  naughty: [
+    "Sanning: Vad är ditt hetaste party-minne?",
+    "Sanning: Har du någonsin skickat nakna bilder?",
+    "Sanning: Vem skulle du vilja kyssa här?",
+    "Konsekvens: Gör en sexig pose",
+    "Sanning: Vad är ditt pinsammaste sex-minne?",
+    "Konsekvens: Berätta en hemlig crush",
+    "Sanning: Har du någonsin haft sex på fest?",
+    "Konsekvens: Ta en shot och ropa 'Jag älskar fest!'",
+    "Sanning: Har du någonsin flirtat med någon i gruppen?",
+    "Konsekvens: Gör en rolig imitation av någon du gillar"
+  ],
+  easy: [
+    "Vilken är din favoritdrink?",
+    "Vilket är ditt favoritpartyspel?",
+    "Vilken låt får dig alltid att dansa?",
+    "Favoritmat på fest?",
+    "Har du någonsin sjungit karaoke?",
+    "Har du någonsin somnat på fest?",
+    "Favoritminne från fest?",
+    "Vilket party-minne får dig alltid att skratta?",
+    "Vilken dryck dricker du helst på fest?",
+    "Vad gör dig alltid glad på fest?"
+  ],
+  challenge: [
+    "Ta en shot direkt",
+    "Dansa 20 sekunder utan musik",
+    "Byt plats med någon vid bordet",
+    "Skicka ett roligt meddelande till gruppen",
+    "Imitera någon i rummet",
+    "Hoppa upp och ner 10 gånger",
+    "Ropa 'Jag älskar fest!' högt",
+    "Byt kläder med någon i 30 sekunder",
+    "Gör en rolig pose och håll den i 5 sekunder",
+    "Säg en rolig komplimang till någon"
+  ],
+  party: [
+    "Spela en snabb runda kort",
+    "Gör en rolig utmaning med ett par",
+    "Tävla i vem som kan dansa bäst",
+    "Sjung en låt tillsammans",
+    "Byt drink med någon",
+    "Ta en grupp-selfie",
+    "Starta en minikaraoke",
+    "Rita något pinsamt på ett papper",
+    "Skicka ett roligt meddelande till alla på festen",
+    "Gör en kort skattjakt i rummet"
+  ]
+};
+
+let currentCategory = [];
+function startCategory(cat) {
+  currentCategory = categories[cat];
+  document.getElementById("menu").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  nextCard();
+}
+
+function nextCard() {
+  const random = Math.floor(Math.random() * currentCategory.length);
+  const card = document.getElementById("cardText");
+  card.style.opacity = 0;
+  setTimeout(() => {
+    card.innerText = currentCategory[random];
+    card.style.opacity = 1;
+  }, 200);
+}
+
+function goBack() {
+  document.getElementById("game").style.display = "none";
+  document.getElementById("menu").style.display = "block";
+}
+</script>
+</body>
+</html>
