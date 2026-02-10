@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festspel 🎉</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      padding: 15px 20px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .menu button {
+      width: 90%;
+      max-width: 300px;
+      background: #ff4d6d;
+      color: white;
+    }
+    .card {
+      margin-top: 30px;
+      font-size: 22px;
+      min-height: 80px;
+    }
+    .back {
+      background: #444;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Festspel</h1>
+
+  <div class="menu" id="menu">
+    <button onclick="startNever()">🍻 Jag har aldrig</button>
+    <button onclick="startTruth()">🔥 Sanning eller konsekvens</button>
+    <button onclick="startMostLikely()">🤔 Vem är mest trolig</button>
+  </div>
+
+  <div id="game" style="display:none;">
+    <div class="card" id="cardText"></div>
+    <button onclick="nextCard()">➡️ Nästa</button><br>
+    <button class="back" onclick="goBack()">⬅️ Tillbaka</button>
+  </div>
+
+  <script>
+    const neverHaveIever = [
+      "Jag har aldrig skrattat åt något på en fest utan att veta varför",
+      "Jag har aldrig låtsats gilla en låt som alla andra gillade",
+      "Jag har aldrig skickat ett meddelande och ångrat mig direkt",
+      "Jag har aldrig varit vaken hela natten i onödan",
+      "Jag har aldrig sagt 'jag är på väg' utan att vara redo"
+    ];
+
+    const truthOrDare = [
+      "Sanning: Vad är det pinsammaste du gjort på en fest?",
+      "Sanning: Vem här känner dig bäst?",
+      "Konsekvens: Byt plats med någon",
+      "Konsekvens: Gör 10 armhävningar eller försök 😄",
+      "Sanning: Vad gör dig alltid på bra humör?"
+    ];
+
+    const mostLikely = [
+      "Vem är mest trolig att dansa först på bordet?",
+      "Vem är mest trolig att glömma sitt dricksglas?",
+      "Vem är mest trolig att skratta åt en dålig skämt?",
+      "Vem är mest trolig att prata hela natten?",
+      "Vem är mest trolig att göra en oväntad karaoke"
+    ];
+
+    let currentGame = [];
+
+    function startNever() {
+      currentGame = neverHaveIever;
+      showGame();
+    }
+
+    function startTruth() {
+      currentGame = truthOrDare;
+      showGame();
+    }
+
+    function startMostLikely() {
+      currentGame = mostLikely;
+      showGame();
+    }
+
+    function showGame() {
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("game").style.display = "block";
+      nextCard();
+    }
+
+    function nextCard() {
+      const random = Math.floor(Math.random() * currentGame.length);
+      document.getElementById("cardText").innerText = currentGame[random];
+    }
+
+    function goBack() {
+      document.getElementById("game").style.display = "none";
+      document.getElementById("menu").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
